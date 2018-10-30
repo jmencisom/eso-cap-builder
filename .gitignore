@@ -103,7 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# pdf and pages
+# pdf, images and pages files
 src/*.pdf
 src/*.jpg
-src/pages.txt
+src/*.txt
