@@ -6,8 +6,9 @@ from pdf2image import convert_from_path
 import os
 from PIL import Image
 import sys
-import argparse
+# import argparse
 
+from CAPJournal import CAPJournal
 
 def resize_image(inimage):
     new_width = 200
@@ -20,28 +21,31 @@ def resize_image(inimage):
     img.save(inimage)
 
 
-def name_output(filename, start_page):
+def name_output(capnumber, start_page):
     
-    name_no_extension = os.path.splitext(filename)[0]
+    number = capnumber
 
     if start_page == 1:
-        output_filename = "%s_cover" % (name_no_extension)
+        output_filename = "%s_cover" % (number)
     else:
 
         if start_page < 10:
-            output_filename = "%s_0%s" % (name_no_extension, start_page)
+            output_filename = "%s_0%s" % (number, start_page)
         else:
-            output_filename = "%s_%s" % (name_no_extension, start_page)
+            output_filename = "%s_%s" % (number, start_page)
 
     return output_filename
 
 
-def write_jpg(pdf_file, start_page):
+def write_jpg(capjournal, start_page):
     
-    pages = convert_from_path(pdf_file, dpi=200, first_page=start_page, last_page=start_page)
+    pages = convert_from_path(capjournal.pdf, 
+        dpi=200, 
+        first_page=start_page, 
+        last_page=start_page)
 
-    output_filename = name_output(pdf_file, start_page)
-    output = output_filename + ".jpg"
+    output_filename = name_output(capjournal.number, start_page)
+    output = capjournal.outputpathimages + output_filename + ".jpg"
 
     for page in pages:
         page.save(output, 'JPEG')
@@ -49,9 +53,9 @@ def write_jpg(pdf_file, start_page):
 
 
 
-def write_pdf(pdf_file, start_page, end_page):
+def write_pdf(capjournal, start_page, end_page):
     INDEX_CORRECTION = 1
-    inputpdf = PdfFileReader(open(pdf_file, "rb"))
+    inputpdf = PdfFileReader(open(capjournal.pdf, "rb"))
     
     start_page_corrected = start_page - INDEX_CORRECTION
     # print("start_page")
@@ -70,9 +74,9 @@ def write_pdf(pdf_file, start_page, end_page):
         current_page = start_page_corrected + i
         output.addPage(inputpdf.getPage(current_page))
 
-    output_filename = name_output(pdf_file, start_page)
+    output_filename = name_output(capjournal.number, start_page)
 
-    outputStream = file(output_filename + ".pdf", "wb")
+    outputStream = file(capjournal.outputpath + output_filename + ".pdf", "wb")
     output.write(outputStream)
     outputStream.close()
     
@@ -102,35 +106,57 @@ def read_pages(pages_file):
     return list_of_pages
 
 def interactive_input():
+    cap = CAPJournal()
+    
     print("PDF file name: ")
-    pdf_file = raw_input()
+    cap.pdf = raw_input()
+    
     print("Pages file name: ")
-    pages_file = raw_input()
+    cap.pages = raw_input()
 
-    return pdf_file, pages_file
+    print("Number: ")
+    cap.number = int(raw_input())
+
+    print("Year: ")
+    cap.year = int(raw_input())
+
+    print("Month: ")
+    cap.month = raw_input()
+
+    return cap
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description='Extracts PDF and thumbnails for CAPJournal issues.')
-    parser.add_argument('-pdf','--pdf_file', help='Input PDF file name',required=True)
-    parser.add_argument('-pages','--pages_file',help='Input Pages file name', required=True)
-    args = parser.parse_args()
+    # parser = argparse.ArgumentParser(description='Extracts PDF and thumbnails for CAPJournal issues.')
+    # parser.add_argument('-pdf','--pdf_file', help='Input PDF file name',required=True)
+    # parser.add_argument('-pages','--pages_file',help='Input Pages file name', required=True)
+    # args = parser.parse_args()
 
 
-    pdf_file = args.pdf_file
-    pages_file = args.pages_file
+    # pdf_file = args.pdf_file
+    # pages_file = args.pages_file
 
-    list_of_pages = read_pages(pages_file)
+
+    cap = CAPJournal()
+    # cap = interactive_input()
+
+    
+    # print("cap.number")
+    # print(cap.number)
+    if not os.path.exists(cap.outputpathimages):
+        os.makedirs(cap.outputpathimages)
+
+    list_of_pages = read_pages(cap.pages)
     total_files = len(list_of_pages)
 
     # print("total_files")
     # print(total_files)
 
-    write_jpg(pdf_file, 1) # Cover image
+    
+    write_jpg(cap, 1) # Cover image
 
     for i in range(total_files):
         start_page = list_of_pages[i][0]
         end_page = list_of_pages[i][1]
-        write_pdf(pdf_file, start_page, end_page)
-        write_jpg(pdf_file, start_page)
-
+        write_pdf(cap, start_page, end_page)
+        write_jpg(cap, start_page)
