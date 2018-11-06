@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from CAPAuthor import CAPAuthor
 
 class CAPArticle:
@@ -6,6 +9,8 @@ class CAPArticle:
     start_page = 0
     end_page = 0
     abstract = ""
+    pdf_path = ""
+    jpg_path = ""
     authors = []
 
     def __init__(self, start_page, end_page):

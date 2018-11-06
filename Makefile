@@ -3,4 +3,5 @@ run:
 	python eso-cap-builder-gui.py &
 
 test:
-	python -m unittest discover
+	cd src; \
+	python -m unittest -v test_capjournal

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 class CAPAuthor:
     first_name = ""
     last_name = ""
