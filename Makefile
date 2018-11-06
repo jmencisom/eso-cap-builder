@@ -1,7 +1,7 @@
 run:
 	cd src; \
-	python eso-cap-builder.py --pdf 24.pdf --pages pages.txt
+	python eso-cap-builder-gui.py &
 
 test:
-	cd test; \
-	python tests.py
+	cd src; \
+	python -m unittest -v test_capjournal
