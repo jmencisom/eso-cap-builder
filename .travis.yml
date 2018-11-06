@@ -3,10 +3,8 @@ language: python
 python:
   - '2.7.15'
 
-install:
-  - sudo apt-get install -y poppler-utils
-
 before_script: 
+  - sudo apt-get install -y poppler-utils
   - cd src/
 
 script:
