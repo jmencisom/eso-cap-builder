@@ -28,6 +28,9 @@ class CAPJournal:
         # Prevent duplication
         self.articles = []
 
+        # print("self.pages_path")
+        # print(self.pages_path)
+        
         openfile = open(self.pages_path, 'r')
         for row in openfile:
             start_page, end_page = row.strip().split(',')
@@ -68,23 +71,6 @@ class CAPJournal:
         img = img.resize((new_width, new_height), Image.ANTIALIAS)
         img.save(large_image)
 
-    def write_jpg_cover(self):
-
-        pdf_path = self.pdf_path
-        images_path = self.images_path
-        cap_number = self.number
-        start_page = 0
-    
-        pages = convert_from_path(pdf_path, dpi=200, first_page=start_page, last_page=start_page)
-
-        filename = str(cap_number) + "_cover"
-        jpg_cover_path = images_path + filename + ".jpg"
-
-        for page in pages:
-            page.save(jpg_cover_path, 'JPEG')
-            self.resize_image(jpg_cover_path)
-
-        self.jpg_cover_path = jpg_cover_path
 
     def write_jpg(self, index):
 
@@ -102,6 +88,26 @@ class CAPJournal:
         for page in pages:
             page.save(jpg_path, 'JPEG')
             self.resize_image(jpg_path)
+
+
+    def write_jpg_cover(self):
+
+        pdf_path = self.pdf_path
+        images_path = self.images_path
+        cap_number = self.number
+        start_page = 1 # Index of cover page
+    
+        pages = convert_from_path(pdf_path, dpi=200, first_page=start_page, last_page=start_page)
+
+        filename = str(cap_number) + "_cover"
+        jpg_cover_path = images_path + filename + ".jpg"
+
+        for page in pages:
+            page.save(jpg_cover_path, 'JPEG')
+            self.resize_image(jpg_cover_path)
+
+        self.jpg_cover_path = jpg_cover_path
+
 
 
     def write_pdf(self, index):
