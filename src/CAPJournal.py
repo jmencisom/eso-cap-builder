@@ -16,14 +16,54 @@ class CAPJournal:
     jpg_cover_path = ""
     output_path = ""
     images_path = ""
+    ads_path = ""
+    url = ""
     articles = []
     
     def __init__(self, number):
         self.number = number
         self.output_path = "output/" + str(self.number) + "/"
         self.images_path = self.output_path + "images/"
+        self.url = "http://www.capjournal.org/issues/" + str(self.number) + "/index.php"
 
+    def write_ads(self):
+        number = self.number
+        year = self.year
+        month = self.month
+        # print("year")
+        # print(year)
+        # print(month)
+        month_dict = {'January': '01', 'February': '02', 'March': '03', 'May': '04', 'April': '05', 'June': '06',
+        'July': '07', 'August': '08', 'September': '09', 'October': '10', 'November': '11', 'December': '12'}
+        url = self.url
+        
+        articles_count = self.get_articles_count()
+        ads_content = u"%%R %sCAPJ....%s\n" % (year, number)
+        ads_content += "%%J Communicating Astronomy with the Public Journal, Volume %s\n" % (number)
+        ads_content += "%%D %s/%s\n" % (month_dict[month], year)
+        ads_content += "%%U %s\n" % (url)
+        ads_content += "\n"
     
+        for i in range(articles_count):
+            # print(i)
+            ads_content += "%%T %s\n" % (self.articles[i].title)
+            ads_content += "%%A %s\n" % (self.articles[i].authors)
+            ads_content += "%%P %s\n" % (self.articles[i].start_page)
+            ads_content += "%%U %s\n" % (self.articles[i].url)
+
+            abstract = self.articles[i].abstract
+            if abstract:
+                ads_content += "%%B %s\n" % (self.articles[i].abstract)
+            ads_content += "\n"
+
+        self.ads_path = self.output_path + "ads.txt"
+
+        ads_file = open(self.ads_path, "w")
+        ads_file.write(ads_content.encode('utf8'))
+        ads_file.close()
+
+
+
     def load_articles(self):
         # Prevent duplication
         self.articles = []
@@ -120,7 +160,14 @@ class CAPJournal:
 
             cap_number = self.number
             start_page = self.articles[index].start_page
+
+            # print("start_page")
+            # print(start_page)
+            
             end_page = self.articles[index].end_page
+
+            # print("self.pdf_path")
+            # print(self.pdf_path)
             
             inputpdf = PdfFileReader(open(self.pdf_path, "rb"))
             
