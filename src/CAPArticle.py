@@ -4,6 +4,7 @@
 from CAPAuthor import CAPAuthor
 import pyPdf
 import subprocess
+import re
 
 class CAPArticle:
 
@@ -27,19 +28,34 @@ class CAPArticle:
     def pdf_to_text(self, pdf):
         # args = ['pdftotext', '-x', '35', '-y', '30', '-W', '250', '-H', '25', '-q', pdf, '-']
         # args = ['pdftotext', '-x', '35', '-y', '30', '-W', '250', '-H', '30', '-q', pdf, '-']
-        args = ['pdftotext', '-x', '35', '-y', '30', '-W', '350', '-H', '30', '-q', pdf, '-']
+        # args = ['pdftotext', '-x', '35', '-y', '30', '-W', '350', '-H', '30', '-q', '-layout', pdf, '-']
+        args = ['pdftotext', 
+        '-f', '1', 
+        '-l', '1', 
+        '-x', '35', 
+        '-y', '35', 
+        '-W', '530', 
+        '-H', '70', 
+        '-q', '-layout', pdf, '-']
         text = subprocess.check_output(args, universal_newlines=True)
-        # print("text")
-        # print(text)
-        text = text.strip()
-        last_index = text.find('\n')
-        text = text[:last_index]
+        # print("text***********")
+        # print(repr(text))
+        # print("text***********")        
+        text = re.sub('\n+',' ', text) # replace internal line brakes by space
+        text = re.sub(' +',' ', text) # replace internal spaces by single space
+        text = text.strip() # remove start/end spaces
+        # print(repr(text))
+
         return text
 
 
-    def set_title(self):
-        pdf_path = self.pdf_path
-        self.title = self.pdf_to_text(pdf_path)
+    def get_title(self):
+        if self.start_page == 3:
+            title = "Editorial"
+        else:
+            pdf_path = self.pdf_path
+            title = self.pdf_to_text(pdf_path)
+        return title
 
 
         # print("self.title")

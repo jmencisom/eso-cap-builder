@@ -1,45 +1,45 @@
 %R 2018CAPJ....24
 %J Communicating Astronomy with the Public Journal, Volume 24
-%D 11/2018
+%D 10/2018
 %U http://www.capjournal.org/issues/24/index.php
 
 %T 
-%A 
+%A []
 %P 3
-%U https://www.capjournal.org/issues/24/24_03.pdf
+%U 
 
 %T 
-%A 
+%A []
 %P 4
-%U https://www.capjournal.org/issues/24/24_04.pdf
+%U 
 
 %T 
-%A 
+%A []
 %P 5
-%U https://www.capjournal.org/issues/24/24_05.pdf
+%U 
 
 %T 
-%A 
+%A []
 %P 7
-%U https://www.capjournal.org/issues/24/24_07.pdf
+%U 
 
 %T 
-%A 
+%A []
 %P 17
-%U https://www.capjournal.org/issues/24/24_17.pdf
+%U 
 
 %T 
-%A 
+%A []
 %P 25
-%U https://www.capjournal.org/issues/24/24_25.pdf
+%U 
 
 %T 
-%A 
+%A []
 %P 32
-%U https://www.capjournal.org/issues/24/24_32.pdf
+%U 
 
 %T 
-%A 
+%A []
 %P 40
-%U https://www.capjournal.org/issues/24/24_40.pdf
+%U 
 
